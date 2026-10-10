@@ -42,6 +42,7 @@ public:
   static std::string StrFromHex(const std::string& p_String);
   static std::string StrFromOct(const std::string& p_String);
   static std::string StrToHex(const std::string& p_String);
+  static std::wstring StripEmojiModifiers(const std::wstring& p_WStr);
   static std::string Textize(const std::string& p_Str);
   static std::string ToFold(const std::string& p_Str);
   static long ToInteger(const std::string& p_Str);

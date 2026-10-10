@@ -353,6 +353,28 @@ std::string StrUtil::StrToHex(const std::string& p_String)
   return oss.str();
 }
 
+std::wstring StrUtil::StripEmojiModifiers(const std::wstring& p_WStr)
+{
+  // Emoji sequences are commonly rendered by terminals as a single wide glyph,
+  // while wcswidth() and curses count each code point separately. Removing the
+  // code points that only modify the preceding one keeps the calculated width
+  // in sync with what is displayed.
+  std::wstring wstr;
+  wstr.reserve(p_WStr.size());
+  for (const wchar_t wch : p_WStr)
+  {
+    const bool isVariationSelector = (wch == 0xFE0E) || (wch == 0xFE0F);
+    const bool isZeroWidthJoiner = (wch == 0x200D);
+    const bool isSkinToneModifier = (wch >= 0x1F3FB) && (wch <= 0x1F3FF);
+    if (!isVariationSelector && !isZeroWidthJoiner && !isSkinToneModifier)
+    {
+      wstr += wch;
+    }
+  }
+
+  return wstr;
+}
+
 std::string StrUtil::Textize(const std::string& p_Str)
 {
   return EmojiUtil::Textize(p_Str);
